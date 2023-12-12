@@ -57,8 +57,7 @@ function RemoveApps {
     Write-Output $message
 
     # Get list of apps from file at the path provided, and remove them one by one
-    Foreach ($app in (Get-Content -Path $appsFile | Where-Object { $_ -notmatch '^#.*' -and $_ -notmatch '^\s*$' } )) 
-    { 
+    Foreach ($app in (Get-Content -Path $appsFile | Where-Object { $_ -notmatch '^#.*' -and $_ -notmatch '^\s*$' } )) { 
         # Remove any spaces before and after the Appname
         $app = $app.Trim()
 
@@ -92,8 +91,7 @@ function RemoveSpecificApps {
         $appslist
     )
 
-    Foreach ($app in $appsList) 
-    { 
+    Foreach ($app in $appsList) { 
         $appString = $app.Trim('*')
         Write-Output "Attempting to remove $appString..."
 
@@ -154,7 +152,7 @@ function ClearStartMenu {
         $startmenuBinFile = $startmenu.Fullname + "\start2.bin"
 
         # Check if bin file exists
-        if(Test-Path $startmenuBinFile) {
+        if (Test-Path $startmenuBinFile) {
             Copy-Item -Path $startmenuTemplate -Destination $startmenu -Force
 
             $cpyMsg = "Replaced start menu for user " + $startmenu.Fullname.Split("\")[2]
@@ -173,7 +171,7 @@ function ClearStartMenu {
     $defaultProfile = "C:\Users\default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState"
 
     # Create folder if it doesn't exist
-    if(-not(Test-Path $defaultProfile)) {
+    if (-not(Test-Path $defaultProfile)) {
         new-item $defaultProfile -ItemType Directory -Force | Out-Null
         Write-Output "Created LocalState folder for default user"
     }
@@ -247,10 +245,10 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
             Write-Output "-------------------------------------------------------------------------------------------"
 
             # Add default parameters if they don't already exist
-            $DefaultParameterNames = 'RemoveApps','DisableTelemetry','DisableBing','DisableLockscreenTips','DisableSuggestions','ShowKnownFileExt','DisableWidgets','HideChat','DisableCopilot'
+            $DefaultParameterNames = 'RemoveApps', 'DisableTelemetry', 'DisableBing', 'DisableLockscreenTips', 'DisableSuggestions', 'ShowKnownFileExt', 'DisableWidgets', 'HideChat', 'DisableCopilot'
             
             foreach ($ParameterName in $DefaultParameterNames) {
-                if(-not $PSBoundParameters.ContainsKey($ParameterName)){
+                if (-not $PSBoundParameters.ContainsKey($ParameterName)) {
                     $PSBoundParameters.Add($ParameterName, $true)
                 }
             }
@@ -308,7 +306,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
             }
 
             # Only show this option for windows 11 users running build 22621 or later
-            if ($winversion -ge 22621){
+            if ($winversion -ge 22621) {
                 Write-Output ""
 
                 if ($( Read-Host -Prompt "Remove all pinned apps from the start menu? This applies to all existing and new users and can't be reverted (y/n)" ) -eq 'y') {
@@ -336,7 +334,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
             }
 
             # Only show this option for windows 11 users running build 22621 or later
-            if ($winversion -ge 22621){
+            if ($winversion -ge 22621) {
                 Write-Output ""
 
                 if ($( Read-Host -Prompt "Disable Windows Copilot? This applies to all users (y/n)" ) -eq 'y') {
@@ -345,7 +343,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
             }
 
             # Only show this option for windows 11 users running build 22000 or later
-            if ($winversion -ge 22000){
+            if ($winversion -ge 22000) {
                 Write-Output ""
 
                 if ($( Read-Host -Prompt "Restore the old Windows 10 style context menu? (y/n)" ) -eq 'y') {
@@ -357,7 +355,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
 
             if ($( Read-Host -Prompt "Do you want to make any changes to the taskbar and related services? (y/n)" ) -eq 'y') {
                 # Only show these specific options for windows 11 users running build 22000 or later
-                if ($winversion -ge 22000){
+                if ($winversion -ge 22000) {
                     Write-Output ""
 
                     if ($( Read-Host -Prompt "   Align taskbar buttons to the left side? (y/n)" ) -eq 'y') {
@@ -407,7 +405,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
                 }
 
                 # Only show this options for windows users running build 22621 or earlier
-                if ($winversion -le 22621){
+                if ($winversion -le 22621) {
                     Write-Output ""
 
                     if ($( Read-Host -Prompt "   Hide the chat (meet now) icon from the taskbar? (y/n)" ) -eq 'y') {
@@ -438,7 +436,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
                 }
 
                 # Only show option for disabling these specific folders for windows 10 users
-                if (get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'"){
+                if (get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'") {
                     Write-Output ""
 
                     if ($( Read-Host -Prompt "Do you want to hide any folders from the windows explorer sidepane? (y/n)" ) -eq 'y') {
@@ -464,7 +462,7 @@ if ((-not $PSBoundParameters.Count) -or $RunDefaults -or $RunWin11Defaults -or (
             }
 
             # Only show option for disabling context menu items for windows 10 users
-            if (get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'"){
+            if (get-ciminstance -query "select caption from win32_operatingsystem where caption like '%Windows 10%'") {
                 Write-Output ""
 
                 if ($( Read-Host -Prompt "Do you want to disable any context menu options? (y/n)" ) -eq 'y') {
@@ -516,7 +514,7 @@ if ($SPParamCount -eq $PSBoundParameters.Keys.Count) {
     Write-Output "The script completed without making any changes."
     
     # Suppress prompt if Silent parameter was passed
-    if(-not $Silent) {
+    if (-not $Silent) {
         Write-Output ""
         Write-Output "Press any key to exit..."
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
@@ -559,7 +557,7 @@ else {
             RegImport "> Disabling telemetry, diagnostic data, app-launch tracking and targeted ads..." $PSScriptRoot\Regfiles\Disable_Telemetry.reg
             continue
         }
-        {$_ -in "DisableBingSearches", "DisableBing"} {
+        { $_ -in "DisableBingSearches", "DisableBing" } {
             RegImport "> Disabling bing search, bing AI & cortana in windows search..." $PSScriptRoot\Regfiles\Disable_Bing_Cortana_In_Search.reg
             continue
         }
@@ -567,7 +565,7 @@ else {
             RegImport "> Disabling tips & tricks on the lockscreen..." $PSScriptRoot\Regfiles\Disable_Lockscreen_Tips.reg
             continue
         }
-        {$_ -in "DisableSuggestions", "DisableWindowsSuggestions"} {
+        { $_ -in "DisableSuggestions", "DisableWindowsSuggestions" } {
             RegImport "> Disabling tips, tricks, suggestions and ads across Windows..." $PSScriptRoot\Regfiles\Disable_Windows_Suggestions.reg
             continue
         }
@@ -603,11 +601,11 @@ else {
             RegImport "> Disabling Windows copilot..." $PSScriptRoot\Regfiles\Disable_Copilot.reg
             continue
         }
-        {$_ -in "HideWidgets", "DisableWidgets"} {
+        { $_ -in "HideWidgets", "DisableWidgets" } {
             RegImport "> Disabling the widget service and hiding the widget icon from the taskbar..." $PSScriptRoot\Regfiles\Disable_Widgets_Taskbar.reg
             continue
         }
-        {$_ -in "HideChat", "DisableChat"} {
+        { $_ -in "HideChat", "DisableChat" } {
             RegImport "> Hiding the chat icon from the taskbar..." $PSScriptRoot\Regfiles\Disable_Chat_Taskbar.reg
             continue
         }
@@ -623,27 +621,27 @@ else {
             RegImport "> Hiding duplicate removable drive entries from the windows explorer navigation pane..." $PSScriptRoot\Regfiles\Hide_duplicate_removable_drives_from_navigation_pane_of_File_Explorer.reg
             continue
         }
-        {$_ -in "HideOnedrive", "DisableOnedrive"} {
+        { $_ -in "HideOnedrive", "DisableOnedrive" } {
             RegImport "> Hiding the onedrive folder from the windows explorer navigation pane..." $PSScriptRoot\Regfiles\Hide_Onedrive_Folder.reg
             continue
         }
-        {$_ -in "Hide3dObjects", "Disable3dObjects"} {
+        { $_ -in "Hide3dObjects", "Disable3dObjects" } {
             RegImport "> Hiding the 3D objects folder from the windows explorer navigation pane..." $PSScriptRoot\Regfiles\Hide_3D_Objects_Folder.reg
             continue
         }
-        {$_ -in "HideMusic", "DisableMusic"} {
+        { $_ -in "HideMusic", "DisableMusic" } {
             RegImport "> Hiding the music folder from the windows explorer navigation pane..." $PSScriptRoot\Regfiles\Hide_Music_folder.reg
             continue
         }
-        {$_ -in "HideIncludeInLibrary", "DisableIncludeInLibrary"} {
+        { $_ -in "HideIncludeInLibrary", "DisableIncludeInLibrary" } {
             RegImport "> Hiding 'Include in library' in the context menu..." $PSScriptRoot\Regfiles\Disable_Include_in_library_from_context_menu.reg
             continue
         }
-        {$_ -in "HideGiveAccessTo", "DisableGiveAccessTo"} {
+        { $_ -in "HideGiveAccessTo", "DisableGiveAccessTo" } {
             RegImport "> Hiding 'Give access to' in the context menu..." $PSScriptRoot\Regfiles\Disable_Give_access_to_context_menu.reg
             continue
         }
-        {$_ -in "HideShare", "DisableShare"} {
+        { $_ -in "HideShare", "DisableShare" } {
             RegImport "> Hiding 'Share' in the context menu..." $PSScriptRoot\Regfiles\Disable_Share_from_context_menu.reg
             continue
         }
@@ -656,7 +654,7 @@ else {
     Write-Output "Script completed successfully!"
 
     # Suppress prompt if Silent parameter was passed
-    if(-not $Silent) {
+    if (-not $Silent) {
         Write-Output ""
         Write-Output "Press any key to exit..."
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
